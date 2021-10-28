@@ -1,0 +1,21 @@
+﻿  main.cpp
+E:\学习\计算机图形学\❤ LearnOpenGL b站傅老师 glew\6 坐标系统\6 坐标系统\main.cpp(158,15): warning C4101: “EBO”: 未引用的局部变量
+LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+LINK : warning LNK4217: 符号“___glewAttachShader”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewCompileShader”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewCreateProgram”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewCreateShader”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewDeleteShader”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewGetProgramInfoLog”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"private: void __thiscall Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AAEXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewGetProgramiv”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"private: void __thiscall Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AAEXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewGetShaderiv”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"private: void __thiscall Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AAEXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewGetUniformLocation”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __thiscall Shader::setBool(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,bool)const " (?setBool@Shader@@QBEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewLinkProgram”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewShaderSource”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“__catch$??0Shader@@QAE@PBD0@Z$0”中)导入
+LINK : warning LNK4217: 符号“___glewUniform1f”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __thiscall Shader::setFloat(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,float)const " (?setFloat@Shader@@QBEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@M@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewUniform1i”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __thiscall Shader::setBool(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,bool)const " (?setBool@Shader@@QBEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewUniformMatrix4fv”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __thiscall Shader::setMat4(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,struct glm::mat<4,4,float,0> &)const " (?setMat4@Shader@@QBEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAU?$mat@$03$03M$0A@@glm@@@Z)”中)导入
+LINK : warning LNK4217: 符号“___glewUseProgram”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __thiscall Shader::use(void)" (?use@Shader@@QAEXXZ)”中)导入
+glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“E:\学习\计算机图形学\? LearnOpenGL b站傅老师 glew\6 坐标系统\Debug\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+  6 坐标系统.vcxproj -> E:\学习\计算机图形学\❤ LearnOpenGL b站傅老师 glew\6 坐标系统\Debug\6 坐标系统.exe

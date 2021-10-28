@@ -1,0 +1,13 @@
+#version 330 core                                  
+out vec4 FragColor;
+
+in vec3 ourColor;
+in vec2 TexCoord;
+
+uniform sampler2D ourTexture;  //引入纹理单元的编号1-15（？）
+
+void main()
+{      
+	//FragColor = texture(ourTexture, TexCoord);  //texture函数：取RGBA四维向量（采样纹理颜色），从ourTexture图片的ourTexCoord坐标 取一个颜色返回给FragColor
+	FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0f);
+}               

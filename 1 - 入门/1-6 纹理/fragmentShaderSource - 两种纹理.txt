@@ -1,0 +1,19 @@
+// fragmentShaderSource - 两种纹理
+#version 330 core                                  
+out vec4 FragColor;
+
+in vec3 ourColor;
+in vec2 TexCoord;
+
+uniform sampler2D texture1;  //纹理单元至少有16个，编号0-15
+uniform sampler2D texture2;
+uniform float mixValue;
+
+void main()
+{   
+	//FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+	//mix返回80%第一个颜色，20%第二个颜色
+	//让笑脸看向另一边（改变x值）
+	//FragColor = mix(texture(texture1, TexCoord), texture(texture2, vec2(1.0 - TexCoord.x, TexCoord.y)), 0.2);
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, vec2(1.0 - TexCoord.x, TexCoord.y)), mixValue);
+}               

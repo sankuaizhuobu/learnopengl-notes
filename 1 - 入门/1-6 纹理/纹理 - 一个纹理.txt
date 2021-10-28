@@ -1,0 +1,324 @@
+
+
+
+
+
+----------------------------------------------------------------- main.cpp ------------------------------------------------------
+
+#include<iostream>
+#define GLEW_STATIC
+#include<GL/glew.h>
+#include<GLFW/glfw3.h>
+#include"Shader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+void test()
+{
+	int width, height, nrChannels;  //图片的宽、高、通道数
+
+	stbi_set_flip_vertically_on_load(true);
+
+	unsigned char* data = stbi_load("pic.png", &width, &height, &nrChannels, 0);
+
+	for (size_t i = 0; i < 50; i++)
+	{
+		std::cout << (int)data[i] << std::endl;
+	}
+
+	stbi_image_free(data);  //释放内存
+}
+
+float vertices[] = {
+	0.5f,0.5f,0.0f,    1.0f,0.0f,0.0f,    1.0f, 1.0f,
+	0.5f,-0.5f,0.0f,    0.0f,1.0f,0.0f,    1.0f,0.0f,
+	-0.5f,-0.5f,0.0f,    0.0f,0.0f,1.0f,  0.0f, 0.0f,
+	-0.5f,0.5f,0.0f,   1.0f,1.0f,1.0f,    0.0f, 1.0f
+};
+
+unsigned int indices[] = {  //索引数组
+	0,1,2,
+	2,3,0
+};
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //如果按下escape键
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+}
+
+int main()
+{
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  //使用profile
+
+	//Open GLFW Window
+	GLFWwindow* window = glfwCreateWindow(800, 600, "My OpenGL Game", NULL, NULL);
+	if (window == NULL)                  //宽，高   
+	{
+		printf("Open Window Failed!");
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);  //tell GLFW to make the context of our window the main context on the current thread
+
+	//Init GLEW
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK)
+	{
+		printf("Init GLEW Failed!");
+		glfwTerminate();
+		return -1;
+	}
+
+	Shader* shader = new Shader("vertexShaderSource.txt", "fragmentShaderSource.txt");
+
+	glViewport(0, 0, 800, 600);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  //注册回调函数
+
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);    //vertices中的数据从CPU到GPU的array buffer，即VBO
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);  //VBO中的坐标->VAO，6号顶点属性
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));  //VBO中的颜色->VAO，7号顶点属性
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));  //VBO中的颜色->VAO，8号顶点属性
+	glEnableVertexAttribArray(8);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	//纹理对象A
+	unsigned int texBufferA;
+	glGenBuffers(1, &texBufferA);
+	glActiveTexture(GL_TEXTURE0);
+	glBindBuffer(GL_TEXTURE_2D, texBufferA);
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);  //生成纹理 data->GL_TEXTURE_2D（texBuffer）
+		glGenerateMipmap(GL_TEXTURE_2D);  //为GL_TEXTURE_2D生成多级纹理
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+
+	//渲染循环
+	while (!glfwWindowShouldClose(window))
+	{
+		processInput(window);
+
+		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindBuffer(GL_TEXTURE_2D, texBufferA);
+
+		/*glActiveTexture(GL_TEXTURE5);
+		glBindBuffer(GL_TEXTURE_2D, texBufferB);*/
+
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+		shader->use();
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		glfwSwapBuffers(window);
+
+		glfwPollEvents();
+
+	}
+
+	system("pause");
+
+	glfwTerminate();
+
+	return 0;
+}
+
+
+
+
+
+------------------------------------------------------- shader.h --------------------------------------------------------------------
+#pragma once
+#include<string>
+
+class Shader
+{
+public:
+	Shader(const char* vertexShaderPath, const char* frgmentSahderPath);
+	std::string vertexString;
+	std::string fragmentString;
+	const char* vertexSource;    //const：后面的变量只能写入一次
+	const char* fragmentSource;
+	unsigned int ID;  //shader program ID
+
+	void use();
+private:
+	void checkCompileErrors(unsigned int ID, std::string type);
+}
+
+---------------------------------------------------- shader.cpp -----------------------------------------------------------------------------
+#include "Shader.h"
+#include<iostream>
+#include<fstream>
+#include<sstream>
+
+#define GLEW_STATIC
+#include<GL/glew.h>
+#include<GLFW/glfw3.h>
+using namespace std;
+
+Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
+{
+	ifstream vertexFile;
+	ifstream fragmentFile;
+	stringstream vertexSStream;
+	stringstream fragmentSStream;
+
+
+	vertexFile.open(vertexShaderPath);  //open：与文档产生关联，还没有读入内存
+	fragmentFile.open(fragmentShaderPath);
+
+	vertexFile.exceptions(ifstream::failbit || ifstream::badbit);
+	fragmentFile.exceptions(ifstream::failbit || ifstream::badbit);
+	try                                                                       //try-catch：try中遇到exception，就会立即跳入catch
+	{
+		if (!vertexFile.is_open()|| !fragmentFile.is_open())
+		{
+			throw exception("open file error");
+		}
+
+		vertexSStream << vertexFile.rdbuf();  //文档从硬盘读到vertexShaderFile，再导入stringstream
+		fragmentSStream << fragmentFile.rdbuf();
+
+		vertexString = vertexSStream.str();
+		fragmentString = fragmentSStream.str();
+
+		vertexSource = vertexString.c_str();
+		fragmentSource = fragmentString.c_str();
+
+		unsigned int vertex, fragment;
+
+		vertex = glCreateShader(GL_VERTEX_SHADER);  //申请一个shader，保存番号
+		glShaderSource(vertex, 1, &vertexSource, NULL);
+		glCompileShader(vertex);
+		checkCompileErrors(vertex, "VERTEX");
+
+		fragment = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragment, 1, &fragmentSource, NULL);
+		glCompileShader(fragment);
+		checkCompileErrors(fragment, "FRAGMENT");
+
+		ID = glCreateProgram();
+		glAttachShader(ID, vertex);
+		glAttachShader(ID, fragment);
+		glLinkProgram(ID);
+		checkCompileErrors(ID, "PROGRAM");
+
+		glDeleteShader(vertex);
+		glDeleteShader(fragment);
+	}
+	catch (const std::exception& ex)  //出现异常，执行
+	{
+		cout << ex.what() << endl;
+	}
+}
+
+void Shader::use()
+{
+	glUseProgram(ID);
+}
+
+void Shader::checkCompileErrors(unsigned int ID, std::string type)
+{
+	int success;
+	char infoLog[512];
+
+	if (type != "PROGRAM")
+	{
+		glGetShaderiv(ID, GL_COMPILE_STATUS, &success);  //询问compile status
+		if (!success)
+		{
+			glGetShaderInfoLog(ID, 512, NULL, infoLog);  //ID，准备了多大空间，返回实际用了多少空间（NULL表示不用返回），目的首地址
+			cout << "shader compile error:" << infoLog << endl;
+		}
+	}
+	else
+	{
+		glGetProgramiv(ID, GL_LINK_STATUS, &success);  //询问link status
+		if (!success)
+		{
+			glGetProgramInfoLog(ID, 512, NULL, infoLog);
+			cout << "program linking error:" << infoLog << endl;
+		}
+	}
+}
+};
+
+
+
+
+
+
+---------------------------------------------- vertexShaderSource.txt ----------------------------------------------------
+#version 330 core                                        
+layout(location = 6) in vec3 aPos;                       
+layout(location = 7) in vec3 aColor;
+layout(location = 8) in vec2 aTexCoord;
+
+out vec4 ourColor;
+out vec2 ourTexCoord;
+
+void main() 
+{                                            
+		gl_Position = vec4(aPos, 1.0);                   
+		ourColor = vec4(aColor,1.0);
+		ourTexCoord = aTexCoord;
+}
+
+
+
+
+
+
+------------------------------------------------ fragmentShaderSource.txt -------------------------------------------------------
+#version 330 core                                  
+in vec4 ourColor;
+in vec2 ourTexCoord;
+
+out vec4 FragColor; 
+
+uniform sampler2D Texture1;  //引入纹理素材，编号1-15
+uniform sampler2D Texture2;
+
+void main()
+{                                       
+	FragColor = texture(Texture1, ourTexCoord);  //texture取颜色函数（采样纹理颜色），从Texture图片的ourTexCoord坐标 取一个颜色返回给FragColor
+}          		           
